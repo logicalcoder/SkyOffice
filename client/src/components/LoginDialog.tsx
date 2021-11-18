@@ -184,21 +184,21 @@ export default function LoginDialog() {
           variant="contained"
           color="secondary"
           size="large"
-          onClick={() => {
-            if (name === '') {
-              setNameFieldEmpty(true)
-            } else {
-              if (connected) {
-                console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name)
-                const game = phaserGame.scene.keys.game as Game
-                game.registerKeys()
-                game.myPlayer.setPlayerName(name)
-                game.myPlayer.setPlayerTexture(avatars[avatarIndex].name)
-                game.network.readyToConnect()
-                dispatch(setLoggedIn(true))
-              }
-            }
-          }}
+          // onClick={() => {
+          //   if (name === '') {
+          //     setNameFieldEmpty(true)
+          //   } else {
+          //     if (connected) {
+          //       console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name)
+          //       const game = phaserGame.scene.keys.game as Game
+          //       game.registerKeys()
+          //       game.myPlayer.setPlayerName(name)
+          //       game.myPlayer.setPlayerTexture(avatars[avatarIndex].name)
+          //       game.network.readyToConnect()
+          //       dispatch(setLoggedIn(true))
+          //     }
+          //   }
+          // }}
         >
           Join
         </Button>
