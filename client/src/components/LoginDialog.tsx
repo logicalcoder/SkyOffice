@@ -97,6 +97,10 @@ const Warning = styled.div`
   gap: 3px;
 `
 
+const Password = styled.div`
+  margin-top: 30px;
+`
+
 const avatars = [
   { name: 'adam', img: Adam },
   { name: 'ash', img: Ash },
@@ -106,8 +110,11 @@ const avatars = [
 
 export default function LoginDialog() {
   const [name, setName] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [wrongPassword, setWrongPassword] = useState<boolean>(false)
   const [avatarIndex, setAvatarIndex] = useState<number>(0)
   const [nameFieldEmpty, setNameFieldEmpty] = useState<boolean>(false)
+  const [passwordFieldEmpty, setPasswordFieldEmpty] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const connected = useAppSelector((state) => state.user.connected)
   const videoConnected = useAppSelector((state) => state.user.videoConnected)
@@ -153,6 +160,27 @@ export default function LoginDialog() {
               }
             }}
           />
+          <Password>
+            <TextField
+              fullWidth
+              type="password"
+              label="Password"
+              variant="outlined"
+              color="secondary"
+              error={passwordFieldEmpty}
+              helperText={passwordFieldEmpty && 'Password is required'}
+              onInput={(e) => {
+                setPassword((e.target as HTMLInputElement).value)
+              }}
+            />
+          </Password>
+
+          {wrongPassword && (
+            <Warning>
+              <Alert severity="error">Wrong password entered!</Alert>
+            </Warning>
+          )}
+          
           {!videoConnected && (
             <Warning>
               <Alert severity="warning">
@@ -184,21 +212,38 @@ export default function LoginDialog() {
           variant="contained"
           color="secondary"
           size="large"
-          // onClick={() => {
-          //   if (name === '') {
-          //     setNameFieldEmpty(true)
-          //   } else {
-          //     if (connected) {
-          //       console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name)
-          //       const game = phaserGame.scene.keys.game as Game
-          //       game.registerKeys()
-          //       game.myPlayer.setPlayerName(name)
-          //       game.myPlayer.setPlayerTexture(avatars[avatarIndex].name)
-          //       game.network.readyToConnect()
-          //       dispatch(setLoggedIn(true))
-          //     }
-          //   }
-          // }}
+          onClick={() => {
+            let valid = true;
+            setPasswordFieldEmpty(false);
+            setNameFieldEmpty(false);
+
+            if (!password || password === '') {
+              setPasswordFieldEmpty(true);
+              valid = false;
+            }
+
+            if (name === '') {
+              setNameFieldEmpty(true);
+              valid = false;
+            }
+
+            if (valid) {
+              if (password !== 'Join123!') {
+                setWrongPassword(true);
+                return;
+              } else {
+                if (connected) {
+                  console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name)
+                  const game = phaserGame.scene.keys.game as Game
+                  game.registerKeys()
+                  game.myPlayer.setPlayerName(name)
+                  game.myPlayer.setPlayerTexture(avatars[avatarIndex].name)
+                  game.network.readyToConnect()
+                  dispatch(setLoggedIn(true))
+                }
+              }
+            }
+          }}
         >
           Join
         </Button>
