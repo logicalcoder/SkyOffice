@@ -119,6 +119,8 @@ export default function LoginDialog() {
   const connected = useAppSelector((state) => state.user.connected)
   const videoConnected = useAppSelector((state) => state.user.videoConnected)
 
+  const ACCESS_KEY = 'Join123!';
+
   return (
     <Wrapper>
       <Title>Welcome to SkyOffice</Title>
@@ -228,7 +230,7 @@ export default function LoginDialog() {
             }
 
             if (valid) {
-              if (password !== 'Join123!') {
+              if (password !== ACCESS_KEY) {
                 setWrongPassword(true);
                 return;
               } else {
